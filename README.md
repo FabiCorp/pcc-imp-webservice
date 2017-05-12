@@ -21,6 +21,6 @@ If you want to run the advanced Python based anonymization you need additional S
 psql
 CREATE DATABASE PrivacyCrashCam;
 \q
-psql -d PrivacyCrashCam -a -f src/main/resources/postgres/createTablesAndTestData.sql
+psql -d privacycrashcam -a -f src/main/resources/postgres/createTablesAndTestData.sql
 ```
-To get a connection to the data, edit the file src/main/java/edu/kit/informatik/pcc/service/data/DatabaseManager.java to change username, password etc for your own details
+To get a connection to the data, edit the file src/test/java/edu/kit/informatik/pcc/service/data/DatabaseManager.java to change username, password etc for your own details
