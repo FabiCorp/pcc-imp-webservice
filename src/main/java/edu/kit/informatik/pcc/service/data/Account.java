@@ -2,6 +2,7 @@ package edu.kit.informatik.pcc.service.data;
 
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -67,12 +68,12 @@ public class Account {
             return false;
         }
         try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            // Create MessageDigest instance for SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             //Add password bytes to digest
             md.update(salt);
             //Get the hash's bytes
-            byte[] bytes = md.digest(password.getBytes());
+            byte[] bytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
             //This bytes[] has bytes in decimal format;
             //Convert it to hexadecimal format
             StringBuilder sb = new StringBuilder();

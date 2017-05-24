@@ -25,6 +25,7 @@ import java.util.logging.Logger;
  */
 @Path("webservice")
 public class ServerProxy {
+    //TODO: MAKE NEW FAIL CASES AS RESPONSES FOR CLIENTS AND SERVICE (CHECK CORRECT RESPONSES ON BOTH SIDES)
     //TODO: ASK IF YOU NEED TO CHECK IF VIDEO_ID AND ACCOUNT HAVE A CONNECTION TO EACH OTHER, else send a FAILURE MESSAGE BACK
     //TODO: CREATE TABLE TO SHOW EACH RETURN PER METHOD
     /* #############################################################################################
@@ -167,7 +168,7 @@ public class ServerProxy {
             return FAILURE;
         }
         String accountStatus = setUpForRequest(accountData);
-        if (accountStatus.equals(SUCCESS)) {
+        if (accountStatus.equals(SUCCESS) || accountStatus.equals(NOT_VERIFIED)) {
             return videoManager.videoDelete(videoId);
         }
         return WRONG_ACCOUNT;

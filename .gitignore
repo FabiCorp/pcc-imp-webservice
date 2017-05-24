@@ -9,6 +9,9 @@
 # Mac User
 .DS_Store
 
+#Kotlinc
+.idea/kotlinc.xml
+
 # Sensitive or high-churn files:
 .idea/dataSources/
 .idea/dataSources.ids
@@ -50,3 +53,6 @@ fabric.properties
 /tmp
 /meta
 /target
+
+#Cascade
+cascade.xml

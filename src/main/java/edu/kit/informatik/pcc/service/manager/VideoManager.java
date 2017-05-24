@@ -99,6 +99,10 @@ public class VideoManager {
      * @return Returns an InputStream for the download.
      */
     public InputStream download(int videoId) {
+        if (!videoIdVerification(videoId)) {
+            return null;
+        }
+
         VideoInfo videoInfo = databaseManager.getVideoInfo(videoId);
 
         if (videoInfo == null) {
@@ -125,6 +129,10 @@ public class VideoManager {
      * @return string if file deletion successfully accomplished
      */
     public String videoDelete(int videoId) {
+        if (!videoIdVerification(videoId)) {
+            //TODO: NEW FAIL MESSAGE
+            return FAILURE;
+        }
         VideoInfo videoInfo = databaseManager.getVideoInfo(videoId);
         boolean checkDelete1 = false;
         boolean checkDelete2 = false;
@@ -160,6 +168,10 @@ public class VideoManager {
      * @return JSON string with metadata information
      */
     public String getMetaData(int videoId) {
+        if (!videoIdVerification(videoId)) {
+            //TODO: NEW FAIL MESSAGE
+            return FAILURE;
+        }
         String metaName = databaseManager.getMetaName(videoId);
 
         if (metaName == null)
@@ -175,5 +187,21 @@ public class VideoManager {
             Logger.getGlobal().warning("An error occured reading metadata file " + filePath);
             return FAILURE;
         }
+    }
+
+
+    //TODO: Implement Method
+    /**
+     * Checks if specific videoId matches with the corresponding user, which wants to access the video/information
+     *
+     * @param videoId to check for the specific user
+     * @return        returns true if the requesting account has a verified connection to the videoId,
+     *                else returns false
+     */
+    private boolean videoIdVerification(int videoId) {
+        //TODO: IMPLEMENT NEW METHOD IN DatabaseManager
+
+        return true;
+
     }
 }
