@@ -19,6 +19,10 @@ public class LocationConfig {
      */
     public static final String PROJECT_DIR = System.getProperty("user.dir");
     /**
+     * Resource directory
+     */
+    public static final String RESOURCES_DIR = PROJECT_DIR + File.separator + "resources";
+    /**
      * Directory for the anonymized videos.
      */
     public static final String ANONYM_VID_DIR = PROJECT_DIR + File.separator + "vid";
