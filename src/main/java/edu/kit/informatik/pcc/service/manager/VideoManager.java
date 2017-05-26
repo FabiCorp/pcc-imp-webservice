@@ -130,7 +130,6 @@ public class VideoManager {
      */
     public String videoDelete(int videoId) {
         if (!videoIdVerification(videoId)) {
-            //TODO: NEW FAIL MESSAGE
             return FAILURE;
         }
         VideoInfo videoInfo = databaseManager.getVideoInfo(videoId);
@@ -168,10 +167,9 @@ public class VideoManager {
      * @return JSON string with metadata information
      */
     public String getMetaData(int videoId) {
-        if (!videoIdVerification(videoId)) {
-            //TODO: NEW FAIL MESSAGE
+        if (!videoIdVerification(videoId))
             return FAILURE;
-        }
+
         String metaName = databaseManager.getMetaName(videoId);
 
         if (metaName == null)
@@ -199,9 +197,7 @@ public class VideoManager {
      *                else returns false
      */
     private boolean videoIdVerification(int videoId) {
-        //TODO: IMPLEMENT NEW METHOD IN DatabaseManager
-
-        return true;
+        return databaseManager.videoId_UserId_Matching(videoId);
 
     }
 }

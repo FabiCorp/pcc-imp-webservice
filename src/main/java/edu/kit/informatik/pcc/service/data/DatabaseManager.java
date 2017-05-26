@@ -553,13 +553,13 @@ public class DatabaseManager {
 
     /**
      * <p>check if video is uploaded and matching to user</p>
-     * <p><b>IMPORTANT: only use this method after the method connectDatabase() is executed</b></p>
      *
      * @param videoId to check, if videoId matches to the valid user
      * @return if video matches to user
      */
     public boolean videoId_UserId_Matching(int videoId) {
         try {
+            if (!connectDatabase()) return false;
             Statement stmt = this.c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT user_id FROM \"video\" WHERE id=" + videoId + "");
             // insert result in ArrayList
@@ -571,6 +571,7 @@ public class DatabaseManager {
             }
             rs.close();
             stmt.close();
+            this.c.close();
         } catch (SQLException e) {
             Logger.getGlobal().warning("SQL Exception in videoId_UserId_Matching(). " +
                     "Maybe the video is not matching to your account!");
