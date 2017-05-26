@@ -346,7 +346,7 @@ public class DatabaseManager {
             // sql command
             String sql = "insert into \"user\" (mail,password,uuid,verified,password_salt) values ('" + account
                     .getMail
-                    () +
+                            () +
                     "','" +
                     account.getPasswordHash() + "','" + uuid + "', false, '" + salt + "' );";
             stmt.executeUpdate(sql);
@@ -545,5 +545,36 @@ public class DatabaseManager {
             Logger.getGlobal().warning("Checking for mail existence in database failed");
         }
         return count_mail != 0;
+    }
+
+    /* #############################################################################################
+    *                                  useful methods
+    * ###########################################################################################*/
+
+    /**
+     * <p>check if video is uploaded and matching to user</p>
+     * <p><b>IMPORTANT: only use this method after the method connectDatabase() is executed</b></p>
+     *
+     * @param videoId to check, if videoId matches to the valid user
+     * @return if video matches to user
+     */
+    public boolean videoId_UserId_Matching(int videoId) {
+        try {
+            Statement stmt = this.c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT user_id FROM \"video\" WHERE id=" + videoId + "");
+            // insert result in ArrayList
+            if (rs.next()) {
+                int userIdDatabase = rs.getInt("user_id");
+                if (userIdDatabase == account.getId()) {
+                    return true;
+                }
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            Logger.getGlobal().warning("SQL Exception in videoId_UserId_Matching(). " +
+                    "Maybe the video is not matching to your account!");
+        }
+        return false;
     }
 }
