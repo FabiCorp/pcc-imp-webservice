@@ -74,13 +74,13 @@ public class EditingContext {
         this.videoName = videoName;
 
         this.encVid = new File(LocationConfig.TEMP_DIR
-                + File.separator + account.getId() + "_" + videoName + "_" + "encVid.mp4");
+                + File.separator + account.getId() + "_" + videoName + "_" + "encVid" + VideoInfo.FILE_EXTENTION);
         this.encKey = new File(LocationConfig.TEMP_DIR
                 + File.separator + account.getId() + "_" + videoName + "_" + "encKey.txt");
         this.encMetadata = new File(LocationConfig.TEMP_DIR
                 + File.separator + account.getId() + "_" + videoName + "_" + "encMetadata" + Metadata.FILE_EXTENTION);
         this.decVid = new File(LocationConfig.TEMP_DIR
-                + File.separator + account.getId() + "_" + videoName + "_" + "decVid.mp4");
+                + File.separator + account.getId() + "_" + videoName + "_" + "decVid" + VideoInfo.FILE_EXTENTION);
         this.decMetadata = new File(LocationConfig.TEMP_DIR
                 + File.separator + account.getId() + "_" + videoName + "_" + "meta" + Metadata.FILE_EXTENTION);
         this.anonymizedVid = new File(LocationConfig.TEMP_DIR

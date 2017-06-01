@@ -109,7 +109,7 @@ public class VideoProcessingManager {
      * @param response  Object use for giving responses.
      * @param chainType Chain type which will get executed.
      */
-    protected void addTask(InputStream video, InputStream metadata, InputStream key,
+    private void addTask(InputStream video, InputStream metadata, InputStream key,
                            Account account, String videoName, AsyncResponse response, VideoProcessingChain.Chain chainType) {
         if (response == null) {
             Logger.getGlobal().warning("No response given.");

@@ -46,7 +46,7 @@ public class VideoProcessingChain implements Runnable {
      *                                  constructors
      * ###########################################################################################*/
 
-    protected VideoProcessingChain(InputStream video, InputStream metadata, InputStream key, Account account,
+    public VideoProcessingChain(InputStream video, InputStream metadata, InputStream key, Account account,
                                    String videoName, AsyncResponse response, Chain chain)
             throws IllegalArgumentException {
 
@@ -142,7 +142,7 @@ public class VideoProcessingChain implements Runnable {
      * @param video    Uploaded video file as stream.
      * @param metadata Uploaded metadata file as stream.
      * @param key      Uploaded SecretKey file as stream.
-     * @throws IllegalArgumentException incase some of the inputs could not be saved correctly and completely.
+     * @throws IllegalArgumentException in case some of the inputs could not be saved correctly and completely.
      */
     private void saveTempFiles(InputStream video, InputStream metadata, InputStream key)
             throws IllegalArgumentException {
