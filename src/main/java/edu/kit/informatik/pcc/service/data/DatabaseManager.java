@@ -111,7 +111,7 @@ public class DatabaseManager {
      */
     public VideoInfo getVideoInfo(int videoId) {
         VideoInfo vI = null;
-        if (!connectDatabase()) return null;
+        if (!connectDatabase() || videoId == -1) return null;
         // execute sql command and insert result in ArrayList
         try {
             Statement stmt = this.c.createStatement();
@@ -178,7 +178,7 @@ public class DatabaseManager {
      * @return a boolean, to review the success of the sql statement
      */
     public boolean deleteVideoAndMeta(int videoId) {
-        if (!connectDatabase() && videoId!= -1) return false;
+        if (!connectDatabase() || videoId == -1) return false;
         try {
             Statement stmt = this.c.createStatement();
             // sql command
