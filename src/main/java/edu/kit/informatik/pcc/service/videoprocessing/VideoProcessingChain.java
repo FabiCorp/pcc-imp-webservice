@@ -125,7 +125,7 @@ public class VideoProcessingChain implements Runnable {
                 stages.add(new OpenCVPythonAnonymizer());
                 stages.add(new Persistor());
             case SGX:
-                stages.add(new OpenCVAnonymizer());
+                stages.add(new OpenCVPythonAnonymizer());
                 stages.add(new Persistor());
         }
     }

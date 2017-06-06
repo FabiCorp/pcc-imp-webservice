@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author Josh Romanowski
  */
 public class VideoProcessingManager {
-//TODO: can we have a nicer solution for editing context
+    //TODO: can we have a nicer solution for editing context
     /* #############################################################################################
      *                                  attributes
      * ###########################################################################################*/

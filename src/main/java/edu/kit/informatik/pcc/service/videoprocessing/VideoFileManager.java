@@ -7,7 +7,6 @@ import java.io.*;
  * @author David Laubenstein, Fabian Wenzel
  */
 public class VideoFileManager {
-
     /**
      * Context which stores the information needed to process the videos.
      */
@@ -27,7 +26,6 @@ public class VideoFileManager {
      */
     public void saveTempFiles(InputStream video, InputStream metadata, InputStream key)
             throws IllegalArgumentException {
-
         try {
 
             //create output files
@@ -50,11 +48,8 @@ public class VideoFileManager {
      * @param metadata
      * @throws IllegalArgumentException
      */
-    public void safeDecFiles(InputStream video, InputStream metadata)
-        throws IllegalArgumentException {
-
+    public void safeDecFiles(InputStream video, InputStream metadata) throws IllegalArgumentException {
         try {
-
             //create output files
             FileOutputStream videoOut = new FileOutputStream(context.getDecVid());
             FileOutputStream metaOut = new FileOutputStream(context.getDecMetadata());

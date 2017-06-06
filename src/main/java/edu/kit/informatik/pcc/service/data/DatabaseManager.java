@@ -178,7 +178,7 @@ public class DatabaseManager {
      * @return a boolean, to review the success of the sql statement
      */
     public boolean deleteVideoAndMeta(int videoId) {
-        if (!connectDatabase()) return false;
+        if (!connectDatabase() && videoId!= -1) return false;
         try {
             Statement stmt = this.c.createStatement();
             // sql command
