@@ -94,7 +94,33 @@ public class VideoProcessingManager {
      */
     public void addTask(InputStream video, InputStream metadata, InputStream key,
                         Account account, String videoName, AsyncResponse response) {
-        addTask(video, metadata, key, account, videoName, response, VideoProcessingChain.Chain.NORMAL);
+        addTask(video, metadata, key, account, videoName, response, VideoProcessingChain.Chain.SGX);
+    }
+
+    /**
+     * Adds a new task to the queue, which gets executed as soon as resources get free.
+     * Gives response via the response object. Uses a predefined chain setup.
+     *
+     * @param video     Uploaded video.
+     * @param metadata  Uploaded metadata.
+     * @param key       Uploaded key.
+     * @param account   User account who uploaded the video.
+     * @param videoName Video name of the uploaded video.
+     * @param response  Object use for giving responses.
+     */
+    public void addPersistingTask(InputStream video, InputStream metadata, InputStream key,
+                        Account account, String videoName, AsyncResponse response) {
+        VideoProcessingChain chain;
+        try {
+            chain = new VideoProcessingChain(video, metadata, key, account,
+                    videoName, response, VideoProcessingChain.Chain.EMPTY);
+            chain.saveTempFiles(video, metadata, key);
+        } catch (IllegalArgumentException e) {
+            Logger.getGlobal().warning("Setting up save encrypted video "
+                    + videoName + " of user " + account.getId() + " failed. Processing aborted");
+            response.resume("Setting up save encrypted video failed. Processing aborted");
+            return;
+        }
     }
 
     /**
@@ -109,8 +135,9 @@ public class VideoProcessingManager {
      * @param response  Object use for giving responses.
      * @param chainType Chain type which will get executed.
      */
-    private void addTask(InputStream video, InputStream metadata, InputStream key,
-                           Account account, String videoName, AsyncResponse response, VideoProcessingChain.Chain chainType) {
+    protected void addTask(InputStream video, InputStream metadata, InputStream key,
+                           Account account, String videoName, AsyncResponse response,
+                           VideoProcessingChain.Chain chainType) {
         if (response == null) {
             Logger.getGlobal().warning("No response given.");
             return;

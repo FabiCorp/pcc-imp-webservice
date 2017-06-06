@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.ws.rs.container.AsyncResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

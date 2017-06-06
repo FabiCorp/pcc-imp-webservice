@@ -133,6 +133,9 @@ public class VideoProcessingChain implements Runnable {
                 stages.add(new Decryptor());
                 stages.add(new OpenCVPythonAnonymizer());
                 stages.add(new Persistor());
+            case SGX:
+                stages.add(new OpenCVAnonymizer());
+                stages.add(new Persistor());
         }
     }
 
@@ -144,7 +147,7 @@ public class VideoProcessingChain implements Runnable {
      * @param key      Uploaded SecretKey file as stream.
      * @throws IllegalArgumentException in case some of the inputs could not be saved correctly and completely.
      */
-    private void saveTempFiles(InputStream video, InputStream metadata, InputStream key)
+    public void saveTempFiles(InputStream video, InputStream metadata, InputStream key)
             throws IllegalArgumentException {
 
         try {
@@ -216,6 +219,6 @@ public class VideoProcessingChain implements Runnable {
      * Enumeration used to make it simple to add new chain types as well as identify existing ones.
      */
     protected enum Chain {
-        EMPTY, SIMPLE, NORMAL, PYTHON
+        EMPTY, SIMPLE, NORMAL, PYTHON, SGX
     }
 }

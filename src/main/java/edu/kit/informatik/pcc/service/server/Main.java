@@ -10,7 +10,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.*;
 
 /**
@@ -45,6 +47,14 @@ public class Main {
      * @param args no args
      */
     public static void main(String[] args) {
+        // database constants
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream(LocationConfig.RESOURCES_DIR +
+                    File.separator + "connection.properties"));
+        } catch (IOException e) {
+            Logger.getGlobal().severe("Properties file could not be load correctly!");
+        }
         startServer();
     }
 

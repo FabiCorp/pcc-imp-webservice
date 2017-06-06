@@ -1,6 +1,7 @@
 package edu.kit.informatik.pcc.service.manager;
 
 import edu.kit.informatik.pcc.service.data.*;
+import edu.kit.informatik.pcc.service.videoprocessing.VideoProcessingChain;
 import edu.kit.informatik.pcc.service.videoprocessing.VideoProcessingManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -88,6 +89,23 @@ public class VideoManager {
      */
     public void upload(InputStream video, InputStream metadata, InputStream encryptedSymmetricKey,
                          String videoName, AsyncResponse response) {
+        VideoProcessingManager videoProcessingManager = VideoProcessingManager.getInstance();
+        videoProcessingManager.addPersistingTask(video, metadata, encryptedSymmetricKey, account, videoName, response);
+    }
+
+    /**
+     * Uploads a decrypted video to the server. Files get uploaded as input streams.
+     * As the processing of the video is asynchronous to the uploading, there will not be
+     * a useful immediate response.
+     *
+     * @param video                 inputstream of video file to upload
+     * @param metadata              inputstream of metadata file to upload
+     * @param encryptedSymmetricKey inputstream of key file to upload
+     * @param videoName             name of the uploaded video without extension
+     * @param response              asynchronous response used to give response to the client
+     */
+    public void uploadDecVid(InputStream video, InputStream metadata, InputStream encryptedSymmetricKey,
+                       String videoName, AsyncResponse response) {
         VideoProcessingManager videoProcessingManager = VideoProcessingManager.getInstance();
         videoProcessingManager.addTask(video, metadata, encryptedSymmetricKey, account, videoName, response);
     }

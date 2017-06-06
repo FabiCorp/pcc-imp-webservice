@@ -21,7 +21,8 @@ public class LocationConfig {
     /**
      * Resource directory
      */
-    public static final String RESOURCES_DIR = PROJECT_DIR + File.separator + "resources";
+    public static final String RESOURCES_DIR = PROJECT_DIR + File.separator + "src" +
+            File.separator + "main" + File.separator + "resources";
     /**
      * Directory for the anonymized videos.
      */
@@ -41,7 +42,8 @@ public class LocationConfig {
     /**
      * Directory for test resources.
      */
-    public static final String TEST_RESOURCES_DIR = PROJECT_DIR + File.separator + "src" + File.separator + "test" + File.separator + "resources";
+    public static final String TEST_RESOURCES_DIR = PROJECT_DIR + File.separator + "src" +
+            File.separator + "test" + File.separator + "resources";
     /**
      * Directory for output data.
      */

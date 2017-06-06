@@ -75,10 +75,13 @@ public class ServerProxy {
     @Path("videoUpload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public void videoUpload(@FormDataParam(VIDEO) InputStream video, @FormDataParam(METADATA) InputStream metadata,
-                              @FormDataParam(KEY) InputStream encryptedSymmetricKey, @FormDataParam(ACCOUNT) String accountData,
-                              @FormDataParam(VIDEO) FormDataContentDisposition fileDetail, @Suspended AsyncResponse response) {
+                              @FormDataParam(KEY) InputStream encryptedSymmetricKey,
+                              @FormDataParam(ACCOUNT) String accountData,
+                              @FormDataParam(VIDEO) FormDataContentDisposition fileDetail,
+                              @Suspended AsyncResponse response) {
         Logger.getGlobal().info("Upload Request");
-        if (video == null || metadata == null || encryptedSymmetricKey == null || accountData == null || fileDetail == null) {
+        if (video == null || metadata == null || encryptedSymmetricKey == null
+                || accountData == null || fileDetail == null) {
             Logger.getGlobal().info("Uploaded data was not received correctly");
             response.resume("Uploaded data was not received correctly");
             return;
