@@ -143,6 +143,11 @@ public class VideoProcessingChain implements Runnable {
         return context.getVideoName();
     }
 
+    //TODO: find better solution for cleanup
+    public void cleanUp() {
+        videoFileManager.cleanUp();
+    }
+
     /**
      * Enumeration used to make it simple to add new chain types as well as identify existing ones.
      */

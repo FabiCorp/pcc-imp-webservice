@@ -4,6 +4,7 @@ import java.io.*;
 
 /**
  * Created by david on 06.06.17.
+ * @author David Laubenstein, Fabian Wenzel
  */
 public class VideoFileManager {
 
@@ -38,6 +39,29 @@ public class VideoFileManager {
             saveFile(video, videoOut);
             saveFile(metadata, metaOut);
             saveFile(key, keyOut);
+        } catch (IOException e) {
+            cleanUp();
+            throw new IllegalArgumentException();
+        }
+    }
+//TODO: Javadoc
+    /**
+     * @param video
+     * @param metadata
+     * @throws IllegalArgumentException
+     */
+    public void safeDecFiles(InputStream video, InputStream metadata)
+        throws IllegalArgumentException {
+
+        try {
+
+            //create output files
+            FileOutputStream videoOut = new FileOutputStream(context.getDecVid());
+            FileOutputStream metaOut = new FileOutputStream(context.getDecMetadata());
+
+            //safe files
+            saveFile(video, videoOut);
+            saveFile(metadata, metaOut);
         } catch (IOException e) {
             cleanUp();
             throw new IllegalArgumentException();

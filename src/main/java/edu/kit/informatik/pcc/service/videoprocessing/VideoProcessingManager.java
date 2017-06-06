@@ -3,7 +3,6 @@ package edu.kit.informatik.pcc.service.videoprocessing;
 import edu.kit.informatik.pcc.service.data.Account;
 
 import javax.ws.rs.container.AsyncResponse;
-import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
@@ -38,7 +37,6 @@ public class VideoProcessingManager {
      */
     private ExecutorService executor;
 
-    private VideoFileManager videoFileManager;
 
 
     /* #############################################################################################
@@ -56,7 +54,7 @@ public class VideoProcessingManager {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
                 VideoProcessingChain chain = (VideoProcessingChain) r;
-                videoFileManager.cleanUp();
+                chain.cleanUp();
 
                 String errorMessage = "Inserting video " + chain.getVideoName()
                         + " in queue failed. ";
@@ -99,8 +97,7 @@ public class VideoProcessingManager {
     }
 
     /**
-     * Adds a new task to the queue, which gets executed as soon as resources get free.
-     * Gives response via the response object. Uses a predefined chain setup.
+     * Persists all data in order that the sgx can find and procedure the encrpytion of the given files.
      *
      * @param video     Uploaded video.
      * @param metadata  Uploaded metadata.
