@@ -104,10 +104,9 @@ public class VideoManager {
      * @param videoName             name of the uploaded video without extension
      * @param response              asynchronous response used to give response to the client
      */
-    public void uploadDecVid(InputStream video, InputStream metadata, InputStream encryptedSymmetricKey,
-                       String videoName, AsyncResponse response) {
+    public void uploadDecVid(InputStream video, InputStream metadata, String videoName, AsyncResponse response) {
         VideoProcessingManager videoProcessingManager = VideoProcessingManager.getInstance();
-        videoProcessingManager.addTask(video, metadata, encryptedSymmetricKey, account, videoName, response);
+        videoProcessingManager.addTask(video, account, videoName, response);
     }
 
     /**

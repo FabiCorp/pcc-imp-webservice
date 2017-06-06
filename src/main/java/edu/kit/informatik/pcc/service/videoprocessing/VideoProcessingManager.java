@@ -3,6 +3,7 @@ package edu.kit.informatik.pcc.service.videoprocessing;
 import edu.kit.informatik.pcc.service.data.Account;
 
 import javax.ws.rs.container.AsyncResponse;
+import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  * @author Josh Romanowski
  */
 public class VideoProcessingManager {
-
+//TODO: can we have a nicer solution for editing context
     /* #############################################################################################
      *                                  attributes
      * ###########################################################################################*/
@@ -39,6 +40,7 @@ public class VideoProcessingManager {
 
     private VideoFileManager videoFileManager;
 
+
     /* #############################################################################################
      *                                  constructors
      * ###########################################################################################*/
@@ -48,7 +50,6 @@ public class VideoProcessingManager {
      * and a task is being inserted.
      */
     private VideoProcessingManager() {
-        videoFileManager = new VideoFileManager();
         BlockingQueue<Runnable> queue = new LinkedBlockingDeque<>(QUEUE_SIZE);
         executor = new ThreadPoolExecutor(POOL_SIZE, POOL_SIZE, 30,
                 TimeUnit.SECONDS, queue, new RejectedExecutionHandler() {
@@ -89,15 +90,12 @@ public class VideoProcessingManager {
      * Gives response via the response object. Uses a predefined chain setup.
      *
      * @param video     Uploaded video.
-     * @param metadata  Uploaded metadata.
-     * @param key       Uploaded key.
      * @param account   User account who uploaded the video.
      * @param videoName Video name of the uploaded video.
      * @param response  Object use for giving responses.
      */
-    public void addTask(InputStream video, InputStream metadata, InputStream key,
-                        Account account, String videoName, AsyncResponse response) {
-        addTask(video, metadata, key, account, videoName, response, VideoProcessingChain.Chain.SGX);
+    public void addTask(InputStream video, InputStream metadata, Account account, String videoName, AsyncResponse response) {
+        addTask(video, metadata, account, videoName, response, VideoProcessingChain.Chain.SGX);
     }
 
     /**
@@ -113,9 +111,22 @@ public class VideoProcessingManager {
      */
     public void addPersistingTask(InputStream video, InputStream metadata, InputStream key,
                         Account account, String videoName, AsyncResponse response) {
-        VideoProcessingChain chain;
+        if (response == null) {
+            Logger.getGlobal().warning("No response given.");
+            return;
+        }
+
+        if (video == null || metadata == null || key == null
+                || account == null || videoName == null) {
+            Logger.getGlobal().warning("Not all inputs were given correctly");
+            response.resume("Not all inputs were given correctly");
+            return;
+        }
+
+        EditingContext context = new EditingContext(account, videoName);
+
         try {
-            VideoFileManager videoFileManager = new VideoFileManager();
+            VideoFileManager videoFileManager = new VideoFileManager(context);
             videoFileManager.saveTempFiles(video, metadata, key);
         } catch (IllegalArgumentException e) {
             Logger.getGlobal().warning("Setting up save encrypted video "
@@ -130,32 +141,30 @@ public class VideoProcessingManager {
      * Gives response via the response object.
      *
      * @param video     Uploaded video.
-     * @param metadata  Uploaded metadata.
-     * @param key       Uploaded key.
      * @param account   User account who uploaded the video.
      * @param videoName Video name of the uploaded video without extension.
      * @param response  Object use for giving responses.
      * @param chainType Chain type which will get executed.
      */
-    protected void addTask(InputStream video, InputStream metadata, InputStream key,
-                           Account account, String videoName, AsyncResponse response,
+    protected void addTask(InputStream video, InputStream metadata, Account account, String videoName, AsyncResponse response,
                            VideoProcessingChain.Chain chainType) {
         if (response == null) {
             Logger.getGlobal().warning("No response given.");
             return;
         }
 
-        if (video == null || metadata == null || key == null
-                || account == null || videoName == null) {
+        if (video == null || account == null || videoName == null) {
             Logger.getGlobal().warning("Not all inputs were given correctly");
             response.resume("Not all inputs were given correctly");
             return;
         }
 
+        EditingContext context = new EditingContext(account, videoName);
+
         VideoProcessingChain chain;
 
         try {
-            chain = new VideoProcessingChain(video, metadata, key, account, videoName, response, chainType);
+            chain = new VideoProcessingChain(video, metadata, context, response, chainType);
         } catch (IllegalArgumentException e) {
             Logger.getGlobal().warning("Setting up for editing video "
                     + videoName + " of user " + account.getId() + " failed. Processing aborted");

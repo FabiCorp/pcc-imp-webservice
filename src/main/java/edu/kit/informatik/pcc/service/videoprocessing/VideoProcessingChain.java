@@ -40,26 +40,21 @@ public class VideoProcessingChain implements Runnable {
     /**
      * Name of the video being processed.
      */
-    private String videoName;
-    /**
-     * Name of the video being processed.
-     */
     private VideoFileManager videoFileManager;
 
     /* #############################################################################################
      *                                  constructors
      * ###########################################################################################*/
 
-    public VideoProcessingChain(InputStream video, InputStream metadata, InputStream key, Account account,
-                                   String videoName, AsyncResponse response, Chain chain)
+    public VideoProcessingChain(InputStream video, InputStream metadata, EditingContext context,
+                                AsyncResponse response, Chain chain)
             throws IllegalArgumentException {
 
         // save response
         this.response = response;
-        this.videoName = videoName;
 
         // create context
-        context = new EditingContext(account, videoName);
+        this.context = context;
 
         // create stages
         stages = new LinkedList<>();
@@ -67,7 +62,6 @@ public class VideoProcessingChain implements Runnable {
 
         // save temp files
         videoFileManager = new VideoFileManager(context);
-        videoFileManager.saveTempFiles(video, metadata, key);
     }
 
     /* #############################################################################################
@@ -146,7 +140,7 @@ public class VideoProcessingChain implements Runnable {
     }
 
     public String getVideoName() {
-        return videoName;
+        return context.getVideoName();
     }
 
     /**

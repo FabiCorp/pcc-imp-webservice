@@ -10,8 +10,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
@@ -96,6 +95,41 @@ public class ServerProxy {
         }
     }
 
+
+    /**
+     * This is the second upload request taking method,
+     * which expects to get an decrypted video as InputStream.
+     * All needed files and data are send with the MultiPartFeature
+     * (org.glassfish.jersey.media.multipart.MultiPart and co.).
+     *
+     * @param video
+     * @param fileDetail
+     * @param accountData
+     * @param response
+     */
+    @POST
+    @Path("decryptedVideoUpload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public void decryptedVideoUpload(@FormDataParam(VIDEO) InputStream video,
+                                     @FormDataParam(VIDEO) FormDataContentDisposition fileDetail,
+                                     @FormDataParam(ACCOUNT) String accountData,
+                                     @Suspended AsyncResponse response) {
+        if (video == null || fileDetail == null) {
+            Logger.getGlobal().info("Uploaded data was not received correctly");
+            response.resume("Uploaded data was not received correctly");
+            return;
+        }
+        String videoName = FilenameUtils.getBaseName(fileDetail.getFileName());
+        String accountStatus = setUpForRequest(accountData);
+        if (accountStatus.equals(SUCCESS)) {
+            videoManager.uploadDecVid(video, videoName, response);
+        } else {
+            Logger.getGlobal().info("Account data not valid");
+            response.resume("Account data not valid");
+        }
+
+
+    }
     //!All other requests use the normal javax.ws.rs.core.Form for sending data to the service!
 
     /**

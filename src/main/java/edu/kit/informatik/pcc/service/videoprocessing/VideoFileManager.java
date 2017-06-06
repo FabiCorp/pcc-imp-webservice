@@ -15,8 +15,6 @@ public class VideoFileManager {
     public VideoFileManager(EditingContext context) {
         this.context = context;
     }
-    public VideoFileManager() {
-    }
 
     /**
      * Saves all provided inputs to their temporary location on the server.
