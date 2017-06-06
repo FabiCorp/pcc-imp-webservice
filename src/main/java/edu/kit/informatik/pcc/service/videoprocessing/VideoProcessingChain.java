@@ -41,6 +41,10 @@ public class VideoProcessingChain implements Runnable {
      * Name of the video being processed.
      */
     private String videoName;
+    /**
+     * Name of the video being processed.
+     */
+    private VideoFileManager videoFileManager;
 
     /* #############################################################################################
      *                                  constructors
@@ -62,7 +66,8 @@ public class VideoProcessingChain implements Runnable {
         initChain(chain);
 
         // save temp files
-        saveTempFiles(video, metadata, key);
+        videoFileManager = new VideoFileManager(context);
+        videoFileManager.saveTempFiles(video, metadata, key);
     }
 
     /* #############################################################################################
@@ -80,13 +85,13 @@ public class VideoProcessingChain implements Runnable {
         for (IStage stage : stages) {
             if (!stage.execute(context)) {
                 Logger.getGlobal().warning("Stage " + stage.getName() + " failed");
-                cleanUp();
+                videoFileManager.cleanUp();
                 response.resume("Error while editing");
                 return;
             }
         }
 
-        deleteTempFiles(context);
+        videoFileManager.deleteTempFiles(context);
 
         long endTime = System.currentTimeMillis() - startTime;
 
@@ -97,14 +102,6 @@ public class VideoProcessingChain implements Runnable {
         response.resume("Finished editing video");
     }
 
-    /**
-     * Cleans up all files and further context created for the video processing.
-     */
-    void cleanUp() {
-        // atm only calls deleteTempFiles but is separated from it in case further functionality
-        // becomes necessary for cleaning up.
-        deleteTempFiles(context);
-    }
 
     /* #############################################################################################
      *                                  helper methods
@@ -136,69 +133,6 @@ public class VideoProcessingChain implements Runnable {
             case SGX:
                 stages.add(new OpenCVAnonymizer());
                 stages.add(new Persistor());
-        }
-    }
-
-    /**
-     * Saves all provided inputs to their temporary location on the server.
-     *
-     * @param video    Uploaded video file as stream.
-     * @param metadata Uploaded metadata file as stream.
-     * @param key      Uploaded SecretKey file as stream.
-     * @throws IllegalArgumentException in case some of the inputs could not be saved correctly and completely.
-     */
-    public void saveTempFiles(InputStream video, InputStream metadata, InputStream key)
-            throws IllegalArgumentException {
-
-        try {
-
-            //create output files
-            FileOutputStream videoOut = new FileOutputStream(context.getEncVid());
-            FileOutputStream metaOut = new FileOutputStream(context.getEncMetadata());
-            FileOutputStream keyOut = new FileOutputStream(context.getEncKey());
-
-            //save files
-            saveFile(video, videoOut);
-            saveFile(metadata, metaOut);
-            saveFile(key, keyOut);
-        } catch (IOException e) {
-            cleanUp();
-            throw new IllegalArgumentException();
-        }
-    }
-
-    /**
-     * Saves a file provided to a location provided.
-     *
-     * @param input  Input stream passing the file's data.
-     * @param output Output stream saving to the new file.
-     * @throws IOException in case writing or reading fails.
-     */
-    private void saveFile(InputStream input, OutputStream output) throws IOException {
-        int read;
-        byte[] bytes = new byte[1024];
-
-        try {
-            while ((read = input.read(bytes)) != -1) {
-                output.write(bytes, 0, read);
-            }
-        } finally {
-            input.close();
-            output.flush();
-            output.close();
-        }
-    }
-
-    /**
-     * Deletes all the temporary files that were created while processing the video.
-     *
-     * @param context Context that contains all files used.
-     */
-    private void deleteTempFiles(EditingContext context) {
-        for (File file : context.getAllTempFiles()) {
-            if (file.exists()) {
-                file.delete();
-            }
         }
     }
 
