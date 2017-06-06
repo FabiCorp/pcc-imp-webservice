@@ -37,6 +37,8 @@ public class VideoProcessingManager {
      */
     private ExecutorService executor;
 
+    private VideoFileManager videoFileManager;
+
     /* #############################################################################################
      *                                  constructors
      * ###########################################################################################*/
@@ -46,13 +48,14 @@ public class VideoProcessingManager {
      * and a task is being inserted.
      */
     private VideoProcessingManager() {
+        videoFileManager = new VideoFileManager();
         BlockingQueue<Runnable> queue = new LinkedBlockingDeque<>(QUEUE_SIZE);
         executor = new ThreadPoolExecutor(POOL_SIZE, POOL_SIZE, 30,
                 TimeUnit.SECONDS, queue, new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
                 VideoProcessingChain chain = (VideoProcessingChain) r;
-                chain.cleanUp();
+                videoFileManager.cleanUp();
 
                 String errorMessage = "Inserting video " + chain.getVideoName()
                         + " in queue failed. ";
@@ -112,9 +115,8 @@ public class VideoProcessingManager {
                         Account account, String videoName, AsyncResponse response) {
         VideoProcessingChain chain;
         try {
-            chain = new VideoProcessingChain(video, metadata, key, account,
-                    videoName, response, VideoProcessingChain.Chain.EMPTY);
-            chain.saveTempFiles(video, metadata, key);
+            VideoFileManager videoFileManager = new VideoFileManager();
+            videoFileManager.saveTempFiles(video, metadata, key);
         } catch (IllegalArgumentException e) {
             Logger.getGlobal().warning("Setting up save encrypted video "
                     + videoName + " of user " + account.getId() + " failed. Processing aborted");
