@@ -43,7 +43,7 @@ public class DatabaseManagerTest {
         jsonObject.put("mail", mail);
         jsonObject.put("password", password);
         json = jsonObject.toString();
-        account = new Account(json);
+        account = new Account();
         byte[] bytesB = new byte[] { (byte)0xe0, 0x4f, (byte)0xd0, 0x20, (byte)0xea, 0x3a, 0x69, 0x10, (byte)0xa2, (byte)0xd8,
                 0x08, 0x00, 0x2b, 0x30, 0x30, (byte)0x9d };
         bytes = Base64.getEncoder().encodeToString(bytesB);

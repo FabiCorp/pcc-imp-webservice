@@ -69,7 +69,7 @@ public class Persistor implements IStage {
             Files.copy(
                     video.toPath(),
                     new File(LocationConfig.ANONYM_VID_DIR + File.separator +
-                            account.getId() + "_" + videoName + VideoInfo.FILE_EXTENTION).toPath(),
+                            account.getId() + "_" + videoName + VideoInfo.FILE_EXTENSION).toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
 
 
@@ -85,7 +85,7 @@ public class Persistor implements IStage {
             Files.copy(
                     metadata.toPath(),
                     new File(LocationConfig.META_DIR + File.separator +
-                            account.getId() + "_" + metaName + Metadata.FILE_EXTENTION).toPath(),
+                            account.getId() + "_" + metaName + Metadata.FILE_EXTENSION).toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
 
 

@@ -15,7 +15,7 @@ public class VideoInfo {
     /**
      * File extension of video files.
      */
-    public static final String FILE_EXTENTION = ".mp4";
+    public static final String FILE_EXTENSION = ".mp4";
 
     // JSON keys
     private static final String JSON_KEY_NAME = "name";

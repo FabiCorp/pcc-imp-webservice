@@ -62,6 +62,7 @@ public class VideoProcessingChain implements Runnable {
 
         // save temp files
         videoFileManager = new VideoFileManager(context);
+        videoFileManager.safeDecFiles(video, metadata);
     }
 
     /* #############################################################################################

@@ -24,7 +24,7 @@ public class OpenCVPythonAnonymizerTest {
     public void setUp() {
         anonymizer = new OpenCVPythonAnonymizer();
         input = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "decVid.mp4");
-        output = new File(LocationConfig.OUTPUT_DIR + File.separator + "output" + VideoInfo.FILE_EXTENTION);
+        output = new File(LocationConfig.OUTPUT_DIR + File.separator + "output" + VideoInfo.FILE_EXTENSION);
     }
 
     @Test

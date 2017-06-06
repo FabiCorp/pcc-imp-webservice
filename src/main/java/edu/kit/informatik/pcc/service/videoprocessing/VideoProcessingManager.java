@@ -97,7 +97,7 @@ public class VideoProcessingManager {
     }
 
     /**
-     * Persists all data in order that the sgx can find and procedure the encrpytion of the given files.
+     * Persists all data in order that the sgx can find and procedure the encryption of the given files.
      *
      * @param video     Uploaded video.
      * @param metadata  Uploaded metadata.

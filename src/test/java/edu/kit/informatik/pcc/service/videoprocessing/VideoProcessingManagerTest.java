@@ -65,7 +65,7 @@ public class VideoProcessingManagerTest {
         lock = new CountDownLatch(1);
 
         // test
-        manager.addTask(null, null, null, null, null, response, VideoProcessingChain.Chain.EMPTY);
+        manager.addTask(null, null, null, null, response, VideoProcessingChain.Chain.EMPTY);
 
         // check result
         lock.await(2000, TimeUnit.MILLISECONDS);
@@ -80,7 +80,7 @@ public class VideoProcessingManagerTest {
         setupStreams();
 
         // test
-        manager.addTask(vidInput, metaInput, keyInput, account, videoName, response, VideoProcessingChain.Chain.EMPTY);
+        manager.addTask(vidInput, metaInput, account, videoName, response, VideoProcessingChain.Chain.EMPTY);
 
         // check result
         lock.await(2000, TimeUnit.MILLISECONDS);
@@ -95,7 +95,7 @@ public class VideoProcessingManagerTest {
 
         // test
         manager.shutdown();
-        manager.addTask(vidInput, metaInput, keyInput, account, videoName, response, VideoProcessingChain.Chain.EMPTY);
+        manager.addTask(vidInput, metaInput, account, videoName, response, VideoProcessingChain.Chain.EMPTY);
 
         // check result
         lock.await(2000, TimeUnit.MILLISECONDS);

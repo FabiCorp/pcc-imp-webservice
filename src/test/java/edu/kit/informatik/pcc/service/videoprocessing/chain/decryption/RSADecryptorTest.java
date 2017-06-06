@@ -3,6 +3,7 @@ package edu.kit.informatik.pcc.service.videoprocessing.chain.decryption;
 import edu.kit.informatik.pcc.service.data.LocationConfig;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.crypto.SecretKey;
@@ -13,6 +14,7 @@ import java.io.File;
  *
  * @author Josh Romanowski
  */
+@Ignore
 public class RSADecryptorTest {
     private static final String KEY_FILE = LocationConfig.TEST_RESOURCES_DIR + File.separator + "KEY_1487198226374.key";
     private static final String NO_KEY_FILE = LocationConfig.TEST_RESOURCES_DIR + File.separator + "META_1487198226374.json";

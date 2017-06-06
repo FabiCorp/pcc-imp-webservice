@@ -1,7 +1,6 @@
 package edu.kit.informatik.pcc.service.manager;
 
 import edu.kit.informatik.pcc.service.data.*;
-import edu.kit.informatik.pcc.service.videoprocessing.VideoProcessingChain;
 import edu.kit.informatik.pcc.service.videoprocessing.VideoProcessingManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -126,7 +125,7 @@ public class VideoManager {
         }
 
         File video = new File(LocationConfig.ANONYM_VID_DIR + File.separator + account.getId() + "_" +
-                videoInfo.getName() + VideoInfo.FILE_EXTENTION);
+                videoInfo.getName() + VideoInfo.FILE_EXTENSION);
 
         InputStream inputStream;
         try {
@@ -157,14 +156,14 @@ public class VideoManager {
 
         // delete video file
         File videoFile = new File(LocationConfig.ANONYM_VID_DIR + File.separator + account.getId() + "_" +
-                videoInfo.getName() + VideoInfo.FILE_EXTENTION);
+                videoInfo.getName() + VideoInfo.FILE_EXTENSION);
         if (videoFile.exists())
             checkDelete1 = videoFile.delete();
 
         //delete metadata file.
         String metaName = databaseManager.getMetaName(videoId);
         File metaFile = new File(LocationConfig.META_DIR + File.separator + account.getId() + "_" +
-                metaName + Metadata.FILE_EXTENTION);
+                metaName + Metadata.FILE_EXTENSION);
         if (metaFile.exists())
             checkDelete2 = metaFile.delete();
 
@@ -192,7 +191,7 @@ public class VideoManager {
             return FAILURE;
 
         String filePath = LocationConfig.META_DIR + File.separator + account.getId() + "_" +
-                metaName + Metadata.FILE_EXTENTION;
+                metaName + Metadata.FILE_EXTENSION;
 
         try {
             Metadata metadata = new Metadata(new String(Files.readAllBytes(Paths.get(filePath))));

@@ -63,7 +63,7 @@ public class AccountManager {
      * @return Returns status string of the request.
      */
     public String changeAccount(String newAccountData) {
-        Account newAccount = new Account(newAccountData);
+        Account newAccount = new Account();
         if (!newAccount.hashPassword(getSalt()))
             return FAILURE;
         String status = "NOTHING CHANGED";

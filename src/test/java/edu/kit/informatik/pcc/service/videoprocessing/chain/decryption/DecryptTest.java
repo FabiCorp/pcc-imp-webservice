@@ -1,10 +1,7 @@
 package edu.kit.informatik.pcc.service.videoprocessing.chain.decryption;
 
 import edu.kit.informatik.pcc.service.data.LocationConfig;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 
@@ -14,6 +11,7 @@ import java.io.File;
  * @author Josh Romanowski
  * Created by Josh Romanowski on 18.01.2017.
  */
+@Ignore
 public class DecryptTest {
 
     private File encKey;
@@ -29,7 +27,7 @@ public class DecryptTest {
         encVid = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "VIDEO_1487198226374.mp4");
         decVid = new File(LocationConfig.OUTPUT_DIR + File.separator + "decVid.mp4");
         encMeta = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "META_1487198226374.json");
-        decMeta = new File(LocationConfig.OUTPUT_DIR + File.separator + "decMeta.json");
+        decMeta = new File(LocationConfig.OUTPUT_DIR + File.separator + "decMetaForDecTest.json");
         decryptor = new Decryptor();
     }
 

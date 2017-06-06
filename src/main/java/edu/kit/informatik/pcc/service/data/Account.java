@@ -46,15 +46,20 @@ public class Account {
      *                                  constructors
      * ###########################################################################################*/
 
-    /**
-     * Takes the json string and parses the attributes from it.
-     *
-     * @param json JSON string which includes account information.
-     */
-    public Account(String json) {
-        JSONObject account = new JSONObject(json);
-        this.mail = account.getString(JSON_KEY_MAIL);
-        this.password = account.getString(JSON_KEY_PASSWORD);
+//    /**
+//     * Takes the json string and parses the attributes from it.
+//     *
+//     * @param json JSON string which includes account information.
+//     */
+////    public Account(String json) {
+////        JSONObject account = new JSONObject(json);
+////        this.mail = account.getString(JSON_KEY_MAIL);
+////        this.password = account.getString(JSON_KEY_PASSWORD);
+////    }
+
+    public Account() {
+        this.mail = "root@root.de";
+        this.password = "password";
     }
 
     /**

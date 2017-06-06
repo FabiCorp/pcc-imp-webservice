@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.ws.rs.container.AsyncResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +43,7 @@ public class VideoManagerTest {
         accountJson = jsonObject.toString();
 
         //setup account (registered)
-        account = new Account(accountJson);
+        account = new Account();
         databaseManager = new DatabaseManager(account);
         videoManager = new VideoManager(account);
         String saltString = Base64.getEncoder().encodeToString(registerSalt);
@@ -75,12 +74,12 @@ public class VideoManagerTest {
     public void downloadTest() {
         databaseManager.saveProcessedVideoAndMeta("pod", "testMeta");
         int videoId = databaseManager.getVideoIdByName("pod");
-        File podAccount = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + account.getId() + "_pod"+ VideoInfo.FILE_EXTENTION);
-        File podStandard = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "pod" + VideoInfo.FILE_EXTENTION);
+        File podAccount = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + account.getId() + "_pod"+ VideoInfo.FILE_EXTENSION);
+        File podStandard = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "pod" + VideoInfo.FILE_EXTENSION);
         Assert.assertTrue(podStandard.renameTo(podAccount));
         InputStream inputStream = videoManager.download(videoId);
         databaseManager.deleteVideoAndMeta(videoId);
-        File downloadFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "fileDownloadTest" + VideoInfo.FILE_EXTENTION);
+        File downloadFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "fileDownloadTest" + VideoInfo.FILE_EXTENSION);
         try {
             Files.copy(inputStream, downloadFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             inputStream.close();
@@ -96,8 +95,8 @@ public class VideoManagerTest {
         int videoId = -1;
         String videoName = "input4";
         String metaName = "blaa";
-        File video = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + account.getId() + "_" + videoName + VideoInfo.FILE_EXTENTION);
-        File meta = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + account.getId() + "_" + metaName + Metadata.FILE_EXTENTION);
+        File video = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + account.getId() + "_" + videoName + VideoInfo.FILE_EXTENSION);
+        File meta = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + account.getId() + "_" + metaName + Metadata.FILE_EXTENSION);
         boolean statusVideo = false;
         boolean statusMeta = false;
         try {
@@ -130,9 +129,9 @@ public class VideoManagerTest {
         }
         Assert.assertFalse(videoId == -1 );
         File metaAccount = new File(LocationConfig.TEST_RESOURCES_DIR +
-                File.separator + account.getId() + "_" + "metaTest" + Metadata.FILE_EXTENTION);
+                File.separator + account.getId() + "_" + "metaTest" + Metadata.FILE_EXTENSION);
         File metaStandard = new File (LocationConfig.TEST_RESOURCES_DIR +
-                File.separator + "metaTest" + Metadata.FILE_EXTENTION);
+                File.separator + "metaTest" + Metadata.FILE_EXTENSION);
         Assert.assertTrue(metaStandard.renameTo(metaAccount));
         String jsonString = videoManager.getMetaData(videoId);
         Assert.assertTrue(metaAccount.renameTo(metaStandard));

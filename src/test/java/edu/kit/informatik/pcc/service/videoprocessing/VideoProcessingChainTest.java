@@ -1,10 +1,7 @@
 package edu.kit.informatik.pcc.service.videoprocessing;
 
 import edu.kit.informatik.pcc.service.data.*;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -50,8 +47,8 @@ public class VideoProcessingChainTest {
     public void setUp() {
         response = setupResponse();
 
-        vidFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "VIDEO_1487198226374.mp4");
-        metaFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "META_1487198226374.json");
+        vidFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "VIDEO_1487198226374" + VideoInfo.FILE_EXTENSION);
+        metaFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "META_1487198226374" + Metadata.FILE_EXTENSION);
         keyFile = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "KEY_1487198226374.key");
 
         videoName = "1487198226374";
@@ -72,9 +69,9 @@ public class VideoProcessingChainTest {
         }
 
         File testedVid = new File(
-                LocationConfig.ANONYM_VID_DIR + File.separator + "-1_" + videoName + VideoInfo.FILE_EXTENTION);
+                LocationConfig.ANONYM_VID_DIR + File.separator + "-1_" + videoName + VideoInfo.FILE_EXTENSION);
         File testedMeta = new File(
-                LocationConfig.META_DIR + File.separator + "-1_" + videoName + "_meta" + Metadata.FILE_EXTENTION);
+                LocationConfig.META_DIR + File.separator + "-1_" + videoName + "_meta" + Metadata.FILE_EXTENSION);
 
         if (testedVid.exists())
             testedVid.delete();
@@ -83,21 +80,29 @@ public class VideoProcessingChainTest {
     }
 
     @Test
+    @Ignore
     public void emptyChainTest() {
         testChainType(VideoProcessingChain.Chain.EMPTY, 1);
     }
+    @Test
+    public void sgxChainTest() {
+        testChainType(VideoProcessingChain.Chain.SGX, 1);
+    }
 
     @Test
+    @Ignore
     public void simpleChainTest() {
         testChainType(VideoProcessingChain.Chain.SIMPLE, 5);
     }
 
     @Test
+    @Ignore
     public void normalChainTest() {
         testChainType(VideoProcessingChain.Chain.NORMAL, 120);
     }
 
     @Test
+    @Ignore
     public void pythonChainTest() {
         testChainType(VideoProcessingChain.Chain.PYTHON, 500);
     }
@@ -106,8 +111,8 @@ public class VideoProcessingChainTest {
         // test setup
         lock = new CountDownLatch(1);
         try {
-            chain = new VideoProcessingChain(vidInput, metaInput, keyInput,
-                    account, videoName, response, chainType);
+            EditingContext context = new EditingContext(account, videoName);
+            chain = new VideoProcessingChain(vidInput, metaInput, context , response, chainType);
         } catch (IllegalArgumentException e) {
             Assert.fail();
         }

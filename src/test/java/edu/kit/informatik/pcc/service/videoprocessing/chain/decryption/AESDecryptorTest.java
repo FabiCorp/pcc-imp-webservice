@@ -1,10 +1,7 @@
 package edu.kit.informatik.pcc.service.videoprocessing.chain.decryption;
 
 import edu.kit.informatik.pcc.service.data.LocationConfig;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.crypto.SecretKey;
 import java.io.File;
@@ -14,6 +11,7 @@ import java.io.File;
  *
  * @author Josh Romanowski
  */
+@Ignore
 public class AESDecryptorTest {
     private static final String KEY_FILE = LocationConfig.TEST_RESOURCES_DIR + File.separator + "KEY_1487198226374.key";
     private static final String ENC_FILE = LocationConfig.TEST_RESOURCES_DIR + File.separator + "META_1487198226374.json";

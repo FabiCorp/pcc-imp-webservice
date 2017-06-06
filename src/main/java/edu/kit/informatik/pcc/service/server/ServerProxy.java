@@ -61,7 +61,7 @@ public class ServerProxy {
      * This is the main function of the ServerProxy, taking a upload request
      * and forward it to to the VideoManager. All needed files and data are send with the MultiPartFeature
      * (org.glassfish.jersey.media.multipart.MultiPart and co.),
-     * which give us the opportunity to send files via inputstream from the client to the service.
+     * which give us the opportunity to send files via InputStream from the client to the service.
      *
      * @param video                 uploaded video file recorded by client
      * @param metadata              metadata of uploaded video as file
@@ -86,7 +86,7 @@ public class ServerProxy {
             return;
         }
         String videoName = FilenameUtils.getBaseName(fileDetail.getFileName());
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         if (accountStatus.equals(SUCCESS)) {
             videoManager.upload(video, metadata, encryptedSymmetricKey, videoName, response);
         } else {
@@ -104,16 +104,14 @@ public class ServerProxy {
      *
      * @param video
      * @param fileDetail
-     * @param accountData
      * @param response
      */
     @POST
-    @Path("decryptedVideoUpload")
+    @Path("decVideoUpload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public void decryptedVideoUpload(@FormDataParam(VIDEO) InputStream video,
+    public void decVideoUpload(@FormDataParam(VIDEO) InputStream video,
                                      @FormDataParam(METADATA) InputStream metadata,
                                      @FormDataParam(VIDEO) FormDataContentDisposition fileDetail,
-                                     @FormDataParam(ACCOUNT) String accountData,
                                      @Suspended AsyncResponse response) {
         if (video == null || fileDetail == null) {
             Logger.getGlobal().info("Uploaded data was not received correctly");
@@ -121,7 +119,7 @@ public class ServerProxy {
             return;
         }
         String videoName = FilenameUtils.getBaseName(fileDetail.getFileName());
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         if (accountStatus.equals(SUCCESS)) {
             videoManager.uploadDecVid(video, metadata, videoName, response);
         } else {
@@ -135,13 +133,13 @@ public class ServerProxy {
 
     /**
      * This method takes video download requests from client and returns a
-     * response with an entity including an inputstream of the wanted video back.
+     * response with an entity including an InputStream of the wanted video back.
      * The correctness of the answer is given by the http status code 200.
      * Each other status code symbolizes a form of error.
      *
      * @param videoId     integer of specific video to download from client
      * @param accountData string as json with account specifications (mail and password)
-     * @return            returning video as inputstream by success or corresponding failure message
+     * @return            returning video as InputStream by success or corresponding failure message
      */
     //TODO: Check if http numbers are correctly set for each case!
     @POST
@@ -152,8 +150,7 @@ public class ServerProxy {
         if (accountData == null || videoId == 0) {
             return response.status(400).build();
         }
-        setUpForRequest(accountData);
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         if (accountStatus.equals(SUCCESS)) {
             InputStream inputStream = videoManager.download(videoId);
             if (inputStream == null) {
@@ -181,7 +178,7 @@ public class ServerProxy {
         if (accountData == null || videoId == 0) {
             return FAILURE;
         }
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         if (accountStatus.equals(SUCCESS)) {
             return videoManager.getMetaData(videoId);
         }
@@ -205,7 +202,7 @@ public class ServerProxy {
         if (accountData == null || videoId == 0) {
             return FAILURE;
         }
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         if (accountStatus.equals(SUCCESS) || accountStatus.equals(NOT_VERIFIED)) {
             return videoManager.videoDelete(videoId);
         }
@@ -227,7 +224,7 @@ public class ServerProxy {
         if (accountData == null) {
             return FAILURE;
         }
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         if (accountStatus.equals(SUCCESS)) {
             return videoManager.getVideoInfoList();
         }
@@ -248,7 +245,7 @@ public class ServerProxy {
         if (accountData == null) {
             return FAILURE;
         }
-        return setUpForRequest(accountData);
+        return setUpForRequest();
     }
 
     /**
@@ -268,7 +265,7 @@ public class ServerProxy {
         if (accountData == null || uuid == null) {
             return FAILURE;
         }
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         return (accountStatus.equals(NOT_EXISTING)) ?
                 accountManager.registerAccount(uuid) : ACCOUNT_EXISTS;
     }
@@ -288,7 +285,7 @@ public class ServerProxy {
         if (accountData == null || newAccountData == null) {
             return FAILURE;
         }
-        return (setUpForRequest(accountData).equals(SUCCESS)) ?
+        return (setUpForRequest().equals(SUCCESS)) ?
                 accountManager.changeAccount(newAccountData) : WRONG_ACCOUNT;
     }
 
@@ -306,7 +303,7 @@ public class ServerProxy {
         if (accountData == null) {
             return FAILURE;
         }
-        String accountStatus = setUpForRequest(accountData);
+        String accountStatus = setUpForRequest();
         return (accountStatus.equals(SUCCESS) || accountStatus.equals(NOT_VERIFIED)) ?
                 accountManager.deleteAccount(videoManager) : WRONG_ACCOUNT;
     }
@@ -338,12 +335,11 @@ public class ServerProxy {
      * The verification is fulfilled by comparing the send accountData
      * with the database content and giving a account status back to the calling methods.
      *
-     * @param accountData string as json with account specifications (mail and password)
      * @return            account specific status (3 different variants) as string
      */
-    private String setUpForRequest(String accountData) {
+    private String setUpForRequest() {
         //setup account and managers
-        Account account = new Account(accountData);
+        Account account = new Account();
         videoManager = new VideoManager(account);
         accountManager = new AccountManager(account);
 

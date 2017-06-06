@@ -23,7 +23,7 @@ public class OpenCvAnonymizeTest {
     public void setUp() {
         anonymizer = new OpenCVAnonymizer();
         input = new File(LocationConfig.TEST_RESOURCES_DIR + File.separator + "decVid.mp4");
-        output = new File(LocationConfig.OUTPUT_DIR + File.separator + "output" + VideoInfo.FILE_EXTENTION);
+        output = new File(LocationConfig.OUTPUT_DIR + File.separator + "output" + VideoInfo.FILE_EXTENSION);
     }
 
     @Test
