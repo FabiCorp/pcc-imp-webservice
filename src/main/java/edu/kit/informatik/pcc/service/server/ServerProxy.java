@@ -111,6 +111,7 @@ public class ServerProxy {
     @Path("decryptedVideoUpload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public void decryptedVideoUpload(@FormDataParam(VIDEO) InputStream video,
+                                     @FormDataParam(METADATA) InputStream metadata,
                                      @FormDataParam(VIDEO) FormDataContentDisposition fileDetail,
                                      @FormDataParam(ACCOUNT) String accountData,
                                      @Suspended AsyncResponse response) {
@@ -122,7 +123,7 @@ public class ServerProxy {
         String videoName = FilenameUtils.getBaseName(fileDetail.getFileName());
         String accountStatus = setUpForRequest(accountData);
         if (accountStatus.equals(SUCCESS)) {
-            videoManager.uploadDecVid(video, videoName, response);
+            videoManager.uploadDecVid(video, metadata, videoName, response);
         } else {
             Logger.getGlobal().info("Account data not valid");
             response.resume("Account data not valid");

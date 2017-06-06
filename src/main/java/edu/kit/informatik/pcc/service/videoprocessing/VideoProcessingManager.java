@@ -134,6 +134,8 @@ public class VideoProcessingManager {
             response.resume("Setting up save encrypted video failed. Processing aborted");
             return;
         }
+        Logger.getGlobal().warning("Persisting completed successfully");
+        response.resume("Persisting completed successfully");
     }
 
     /**

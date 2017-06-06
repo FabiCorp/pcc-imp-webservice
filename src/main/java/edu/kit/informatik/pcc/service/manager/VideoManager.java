@@ -100,13 +100,12 @@ public class VideoManager {
      *
      * @param video                 inputstream of video file to upload
      * @param metadata              inputstream of metadata file to upload
-     * @param encryptedSymmetricKey inputstream of key file to upload
      * @param videoName             name of the uploaded video without extension
      * @param response              asynchronous response used to give response to the client
      */
     public void uploadDecVid(InputStream video, InputStream metadata, String videoName, AsyncResponse response) {
         VideoProcessingManager videoProcessingManager = VideoProcessingManager.getInstance();
-        videoProcessingManager.addTask(video, account, videoName, response);
+        videoProcessingManager.addTask(video, metadata, account, videoName, response);
     }
 
     /**
